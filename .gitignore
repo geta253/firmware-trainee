@@ -2,3 +2,9 @@
 *.exe
 *.dll
 *.txt
+/c_revision/makefile_test/
+*.layout
+*.depend
+.metadata/
+*.cbp
+
