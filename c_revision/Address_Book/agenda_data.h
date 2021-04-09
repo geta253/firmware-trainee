@@ -21,16 +21,16 @@ struct Agenda
     struct Agenda *next_entry;
 };
 
-int isAgendaEmpty(struct Agenda *);
+int isAgendaEmpty();
 
 int insertEntry(struct Agenda **, struct UserData *);
 
-void printEntireAgenda(struct Agenda *);
-int clearAgenda(struct Agenda **);
+void printEntireAgenda();
+int clearAgenda();
 
 int getSearchedUser();
 uint8_t getSearchedInitial();
-void askForNewEntry();
+int askForNewEntry();
 struct UserData *getNewEntry();
 
 #endif // H_AGENDA_DATA_INCLUDED
