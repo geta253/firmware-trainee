@@ -1,102 +1,83 @@
 #include "agenda_data.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static struct Agenda *agenda = NULL;
 
-void allocateDataMemory(struct UserData *p_entry_data)
+int setUserEntryInAgenda(struct UserData *newUserEntry)
 {
-    p_entry_data->age = malloc(sizeof *(p_entry_data->age));
-}
-
-void askForAge(struct UserData *p_entry_data)
-{
-    printf("Age: ");
-    scanf("%d", p_entry_data->age);
-}
-
-int askForNewEntry()
-{
-    struct UserData entry_data;
-    allocateDataMemory(&entry_data);
-    if(entry_data.age == NULL
-       /*||entry_data.name...*/)
-        {
-            return 0;
-        }
-    //Change return type to include if(NULL)
-    #ifdef _WIN32
-    system("cls");
-    #else
-    system("clear");
-    #endif
-    askForAge(&entry_data);
-    //...
-    insertEntry(&agenda, &entry_data);
-    return 1;
+    if(newUserEntry != NULL)
+    {
+        insertUserEntryInAgenda(&agenda, newUserEntry);
+        return 1;
+    }
+    return 0;
 }
 
 int isAgendaEmpty()
 {
-    if(agenda == NULL) return 1;
+    if(agenda != NULL) return 0;
+    return 1;
+}
+
+int allocateAgendaEntry(struct Agenda **p_newEntry)
+{
+    *p_newEntry = malloc(sizeof **p_newEntry);
+    if(p_newEntry != NULL) return 1;
+    free(p_newEntry);
     return 0;
 }
 
-void allocateEntry(struct Agenda **p_new_entry)
-{
-    *p_new_entry = malloc(sizeof **p_new_entry);
-}
-
-static int linkEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *user_entry)
+int linkAgendaEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *agendaEntry)
 {
     if(isAgendaEmpty(*agenda))
     {
-        *agenda = user_entry;
+        *agenda = agendaEntry;
     }
     else
     {
-        struct Agenda *current_in_loop = *agenda;
-        while(current_in_loop->next_entry != NULL)
+        struct Agenda *currentInLoop = *agenda;
+        while(currentInLoop->nextEntry != NULL)
         {
-            current_in_loop = current_in_loop->next_entry;
+            currentInLoop = currentInLoop->nextEntry;
         }
-        current_in_loop->next_entry = user_entry;
+        currentInLoop->nextEntry = agendaEntry;
     }
     return 1;
 }
 
-int insertEntry(struct Agenda **agenda, struct UserData *user_data)
+int insertUserEntryInAgenda(struct Agenda **agenda, struct UserData *userDataEntry)
 {
-    struct Agenda *new_entry;
-    allocateEntry(&new_entry);
-    if(new_entry == NULL) return 0;
-    new_entry->current_entry = *user_data;
-    new_entry->next_entry = NULL;
-    linkEntryToEndOfAgenda(agenda, new_entry);
+    struct Agenda *newAgendaEntry;
+    if(allocateAgendaEntry(&newAgendaEntry) == UNSUCCESSFUL) return 0;
+    newAgendaEntry->currentEntry = *userDataEntry;
+    free(userDataEntry);
+    newAgendaEntry->nextEntry = NULL;
+    linkAgendaEntryToEndOfAgenda(agenda, newAgendaEntry);
     return 1;
 }
 
 void printEntireAgenda()
 {
-    struct Agenda *current_in_loop = agenda;
-    while(current_in_loop != NULL)
+    struct Agenda *currentInLoop = agenda;
+    while(currentInLoop != NULL)
     {
-        printf("%d\n", *(current_in_loop->current_entry.age));
-        current_in_loop = current_in_loop->next_entry;
+        printf("%d\n", *(currentInLoop->currentEntry.age));
+        currentInLoop = currentInLoop->nextEntry;
     }
 }
 
 int clearAgenda()
 {
-    struct Agenda *current_in_loop = agenda;
-    struct Agenda *auxiliar = current_in_loop;
-    while(current_in_loop != NULL)
+    struct Agenda *currentInLoop = agenda;
+    struct Agenda *auxiliar = currentInLoop;
+    while(currentInLoop != NULL)
     {
-        auxiliar = auxiliar->next_entry;
-        free(current_in_loop->current_entry.age);
+        auxiliar = auxiliar->nextEntry;
+        free(currentInLoop->currentEntry.age);
         //...
-        free(current_in_loop);
-        current_in_loop = auxiliar;
+        free(currentInLoop);
+        currentInLoop = auxiliar;
     }
     agenda = NULL;
     return 1;
