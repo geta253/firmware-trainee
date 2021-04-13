@@ -20,6 +20,7 @@ void showMenu()
 
     printf("Select an option (1-4): ");
     scanf("%d", &menuInput);
+    getchar();
     if( (menuInput<1) || (menuInput>4) )
     {
         printf("Please type a valid option\n");
