@@ -1,8 +1,9 @@
 #include "agenda_data.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 
-static struct Agenda *agenda = NULL;
+struct Agenda *agenda = NULL;
 
 int setUserEntryInAgenda(struct UserData *newUserEntry)
 {
@@ -20,7 +21,7 @@ int isAgendaEmpty()
     return 1;
 }
 
-int allocateAgendaEntry(struct Agenda **p_newEntry)
+int hasAllocatedAgendaEntry(struct Agenda **p_newEntry)
 {
     *p_newEntry = malloc(sizeof **p_newEntry);
     if(p_newEntry != NULL) return 1;
@@ -28,7 +29,7 @@ int allocateAgendaEntry(struct Agenda **p_newEntry)
     return 0;
 }
 
-int linkAgendaEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *agendaEntry)
+int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *agendaEntry)
 {
     if(isAgendaEmpty(*agenda))
     {
@@ -46,39 +47,24 @@ int linkAgendaEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *agendaEn
     return 1;
 }
 
+void displayUserEntryAddedInAgendaMessage()
+{
+    printf("\nUser successfully added in Agenda!");
+    printf("\nPress any key to return\n");
+    getch();
+}
+
 int insertUserEntryInAgenda(struct Agenda **agenda, struct UserData *userDataEntry)
 {
     struct Agenda *newAgendaEntry;
-    if(allocateAgendaEntry(&newAgendaEntry) == UNSUCCESSFUL) return 0;
+    if(!hasAllocatedAgendaEntry(&newAgendaEntry)) return 0;
     newAgendaEntry->currentEntry = *userDataEntry;
     free(userDataEntry);
     newAgendaEntry->nextEntry = NULL;
-    linkAgendaEntryToEndOfAgenda(agenda, newAgendaEntry);
+    if(hasLinkedAgendaEntryToEndOfAgenda(agenda, newAgendaEntry))
+    {
+        displayUserEntryAddedInAgendaMessage();
+    }
     return 1;
 }
 
-void printEntireAgenda()
-{
-    struct Agenda *currentInLoop = agenda;
-    while(currentInLoop != NULL)
-    {
-        printf("%d\n", *(currentInLoop->currentEntry.age));
-        currentInLoop = currentInLoop->nextEntry;
-    }
-}
-
-int clearAgenda()
-{
-    struct Agenda *currentInLoop = agenda;
-    struct Agenda *auxiliar = currentInLoop;
-    while(currentInLoop != NULL)
-    {
-        auxiliar = auxiliar->nextEntry;
-        free(currentInLoop->currentEntry.age);
-        //...
-        free(currentInLoop);
-        currentInLoop = auxiliar;
-    }
-    agenda = NULL;
-    return 1;
-}

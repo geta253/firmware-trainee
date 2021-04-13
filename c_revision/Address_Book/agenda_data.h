@@ -8,21 +8,17 @@ struct Agenda
     struct UserData currentEntry;
     struct Agenda *nextEntry;
 };
+extern struct Agenda *agenda;
 
 int setUserEntryInAgenda(struct UserData *);
 
 int isAgendaEmpty();
 
-int allocateAgendaEntry(struct Agenda **);
+int hasAllocatedAgendaEntry(struct Agenda **);
 
-int linkAgendaEntryToEndOfAgenda(struct Agenda **, struct Agenda *);
+int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **, struct Agenda *);
 
 int insertUserEntryInAgenda(struct Agenda **, struct UserData *); //private
-
-void printEntireAgenda();
-
-int clearAgenda();
-
 
 
 #endif // H_AGENDA_DATA_INCLUDED
