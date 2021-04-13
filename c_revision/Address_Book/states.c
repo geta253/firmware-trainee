@@ -3,9 +3,9 @@
 
 static state_t state = 0;
 
-void setState(state_t user_state)
+void setState(state_t userState)
 {
-    state = user_state;
+    state = userState;
 }
 
 state_t getState()
