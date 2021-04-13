@@ -2,6 +2,8 @@
 #include "act2_states.h"
 #include "agenda_data.h"
 #include "menu.h"
+#include "user_data.h"
+#include <stdio.h>
 
 /*
 STATES:
@@ -14,38 +16,30 @@ STATES:
 
 int main(void)
 {
-    struct Agenda *agenda = NULL;
     while(getState() != END)
     {
         switch(getState())
         {
         case DISPLAY_MENU:
             showMenu();
-            state_t inputed_state = getMenuInput();
-            setState(inputed_state);
-            break; //menu.h
+            setState(getMenuInput());
+            break;
 
         case INSERT_USER:
-            askForNewEntry();
-            struct UserData *entry = getNewEntry();
-            setAgendaEntry(agenda, entry);
-            displayAddedMessage();
+            setUserEntryInAgenda(getNewUserEntry()); //, agenda
             setState(DISPLAY_MENU);
-            break; //agenda_data.h
+            break;
 
         case SEARCH_USER:
-            askForUser();
-            uint8_t *searched_user = getSearchedUser();
-            displayUserData(searched_user); //wait press for return
+            displayUserByName(getSearchedUser()); //, agenda
             setState(DISPLAY_MENU);
-            break; //agenda_data.h
+            break;
 
         case LIST_BY_INITIAL:
-            askForInitial();
-            uint8_t searched_initial = getSearchedInitial();
-            displayDataByInitial(searched_initial);
+            displayUserByInitial(getSearchedInitial()); //, agenda
             setState(DISPLAY_MENU);
-            break; //agenda_data.h
+            break;
+
         }
     }
     return 0;
