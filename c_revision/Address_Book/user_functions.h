@@ -5,12 +5,13 @@
 
 #include "user_data.h"
 #include "agenda.h"
+#include <stdint.h>
 
-int setUserEntryInAgenda(UserData *, Agenda **);
 UserData *getNewUserEntry();
-char *getSearchedUser();
-void displayUserByName(char *, Agenda *);
-char getSearchedInitial();
-void displayUserByInitial(char, Agenda *);
+int setUserEntryInAgenda(UserData *, Agenda **);
+uint8_t *getSearchedUser();
+void displayUserByName(uint8_t *, Agenda *);
+uint8_t getSearchedInitial();
+void displayUserByInitial(uint8_t, Agenda *);
 
 #endif // H_USER_FUNCTIONS_INCLUDED

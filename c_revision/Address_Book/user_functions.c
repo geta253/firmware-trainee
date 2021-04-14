@@ -5,17 +5,39 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <stdint.h>
+#include <inttypes.h>
 
 //Private Declarations
 int hasAllocatedAgendaEntry(Agenda **);
 int hasLinkedAgendaEntryToEndOfAgenda(Agenda **, Agenda *);
 int hasAllocatedUserDataMemory(UserData *);
-void askForAge(UserData *);
 void askForName(UserData *);
+void askForAddress(UserData *);
+void askForPhone(UserData *);
+void askForCEP(UserData *);
+void reallocateUserDataMemory(UserData *);
 void freeAll(UserData *);
 void displayUserEntryAddedInAgendaMessage();
 
 //Public Definitions
+UserData *getNewUserEntry()
+{
+    UserData *userData = malloc(sizeof *(userData));
+    if(userData == NULL) return NULL;
+    if(!hasAllocatedUserDataMemory(userData))
+    {
+        freeAll(userData);
+        return NULL;
+    }
+    askForName(userData);
+    askForAddress(userData);
+    askForPhone(userData);
+    askForCEP(userData);
+    reallocateUserDataMemory(userData);
+    return userData;
+}
+
 int setUserEntryInAgenda(UserData *newUserEntry, Agenda **agenda)
 {
     if(newUserEntry != NULL)
@@ -34,41 +56,28 @@ int setUserEntryInAgenda(UserData *newUserEntry, Agenda **agenda)
     return 0;
 }
 
-UserData *getNewUserEntry()
+uint8_t *getSearchedUser()
 {
-    UserData *userData = malloc(sizeof *(userData));
-    if(userData == NULL) return NULL;
-    if(!hasAllocatedUserDataMemory(userData))
-    {
-        freeAll(userData);
-        return NULL;
-    }
-    askForName(userData);
-    askForAge(userData);
-    //...
-    return userData;
-}
-
-char *getSearchedUser()
-{
-    //char *p = fgets(name, sizeof name, stdin) for name[MAX]
-    char *searchedName = malloc(sizeof *searchedName * MAX_LENGTH);
+    //uint8_t *p = fgets(name, sizeof name, stdin) for name[MAX]
+    uint8_t *searchedName = malloc(sizeof *searchedName * MAX_LENGTH);
     printf("\nSearch by a name: ");
-    return fgets(searchedName, sizeof *searchedName * MAX_LENGTH, stdin);
+    return (uint8_t*)fgets((char*)searchedName, sizeof *searchedName * MAX_LENGTH, stdin);
 }
 
-void displayUserByName(char *searchedName, Agenda *agenda)
+void displayUserByName(uint8_t *searchedName, Agenda *agenda)
 {
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
     Agenda *currentInLoop = agenda;
     while(currentInLoop != NULL)
     {
-        if(!strcmp(currentInLoop->currentEntry.name, searchedName)) //if equal
+        if(!strcmp((char*)currentInLoop->currentEntry.name, (char*)searchedName)) //if equal
         {
             printf("\nUser searched:\n");
-            printf("Name: %s", currentInLoop->currentEntry.name);
-            printf("Age: %d\n", *(currentInLoop->currentEntry.age));
+            printf("Name: %s", (char*)currentInLoop->currentEntry.name);
+            printf("Address: %s", (char*)currentInLoop->currentEntry.address);
+            printf("Phone: %s", (char*)currentInLoop->currentEntry.phone);
+            printf("CEP: %"SCNu64"\n", *(currentInLoop->currentEntry.CEP));
 
             numberOfUsersFound++;
         }
@@ -83,14 +92,14 @@ void displayUserByName(char *searchedName, Agenda *agenda)
     getch();
 }
 
-char getSearchedInitial()
+uint8_t getSearchedInitial()
 {
-    //char *p = fgets(name, sizeof name, stdin) for name[MAX]
+    //uint8_t *p = fgets(name, sizeof name, stdin) for name[MAX]
     printf("\nSearch by an initial:");
-    return (char)fgetc(stdin);
+    return (uint8_t)fgetc(stdin);
 }
 
-void displayUserByInitial(char initial, Agenda *agenda)
+void displayUserByInitial(uint8_t initial, Agenda *agenda)
 {
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
@@ -101,9 +110,10 @@ void displayUserByInitial(char initial, Agenda *agenda)
     {
         if(currentInLoop->currentEntry.name[0] == initial)
         {
-            //print name..
-            printf("\nName: %s", currentInLoop->currentEntry.name);
-            printf("Age: %d\n", *(currentInLoop->currentEntry.age));
+            printf("\nName: %s", (char*)currentInLoop->currentEntry.name);
+            printf("Address: %s", (char*)currentInLoop->currentEntry.address);
+            printf("Phone: %s", (char*)currentInLoop->currentEntry.phone);
+            printf("CEP: %"SCNu64"\n", *(currentInLoop->currentEntry.CEP));
 
             numberOfUsersFound++;
         }
@@ -144,36 +154,61 @@ int hasLinkedAgendaEntryToEndOfAgenda(Agenda **agenda, Agenda *agendaEntry)
     return 1;
 }
 
-int hasAllocatedUserDataMemory(UserData *p_userData)
+int hasAllocatedUserDataMemory(UserData *userData)
 {
-    p_userData->age = malloc(sizeof *(p_userData->age));
-    if(p_userData->age == NULL) return 0;
-    p_userData->name = malloc(sizeof *(p_userData->name) * MAX_LENGTH);
-    if(p_userData->name == NULL) return 0;
-    //...
+    userData->name = malloc(sizeof *(userData->name) * MAX_LENGTH);
+    if(userData->name == NULL) return 0;
+    userData->address = malloc(sizeof *(userData->address) * MAX_LENGTH);
+    if(userData->address == NULL) return 0;
+    userData->phone = malloc(sizeof *(userData->phone) * MAX_LENGTH);
+    if(userData->phone == NULL) return 0;
+    userData->CEP = malloc(sizeof *(userData->CEP));
+    if(userData->CEP == NULL) return 0;
     return 1;
 }
 
-void askForName(UserData *p_userData)
+void askForName(UserData *userData)
 {
     printf("\nName: ");
-    int nameLength = sizeof *(p_userData->name) * MAX_LENGTH;
-    fgets(p_userData->name, nameLength, stdin);
-
+    int nameLength = sizeof *(userData->name) * MAX_LENGTH;
+    fgets((char*)userData->name, nameLength, stdin);
 }
 
-void askForAge(UserData *p_userData)
+void askForAddress(UserData *userData)
 {
-    printf("Age: ");
-    scanf("%d", p_userData->age);
+    printf("Address: ");
+    int addressLength = sizeof *(userData->address) * MAX_LENGTH;
+    fgets((char*)userData->address, addressLength, stdin);
+}
+void askForPhone(UserData *userData)
+{
+    printf("Phone: ");
+    int phoneLength = sizeof *(userData->phone) * MAX_LENGTH;
+    fgets((char*)userData->phone, phoneLength, stdin);
+}
+void askForCEP(UserData *userData)
+{
+    printf("CEP: ");
+    scanf("%"SCNu64, userData->CEP);
     getchar();
+}
+
+void reallocateUserDataMemory(UserData *userData)
+{
+    uint8_t *name = realloc(userData->name, strlen((char*) userData->name));
+    if(name != NULL) userData->name = name;
+    uint8_t *address = realloc(userData->address, strlen((char*) userData->address));
+    if(address != NULL) userData->address = address;
+    uint8_t *phone = realloc(userData->phone, strlen((char*) userData->phone));
+    if(phone != NULL) userData->phone = phone;
 }
 
 void freeAll(UserData *userData)
 {
-    free(userData->age);
     free(userData->name);
-    //...
+    free(userData->address);
+    free(userData->phone);
+    free(userData->CEP);
     free(userData);
 }
 

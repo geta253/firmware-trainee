@@ -15,7 +15,7 @@ STATES:
     END             ,
 */
 
-int main()git
+int main()
 {
     Agenda *agenda = newAgenda();
     while(getState() != END)
