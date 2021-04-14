@@ -1,4 +1,6 @@
 #include "user_public_functions.h"
+#include "memory_manipulation.h"
+#include "user_interaction.h"
 #include "user_data.h"
 #include "agenda.h"
 #include <stdio.h>
@@ -7,18 +9,6 @@
 #include <conio.h>
 #include <stdint.h>
 #include <inttypes.h>
-
-//Private Declarations
-int hasAllocatedAgendaEntry(Agenda **);
-int hasLinkedAgendaEntryToEndOfAgenda(Agenda **, Agenda *);
-int hasAllocatedUserDataMemory(UserData *);
-void askForName(UserData *);
-void askForAddress(UserData *);
-void askForPhone(UserData *);
-void askForCEP(UserData *);
-void reallocateUserDataMemory(UserData *);
-void freeAll(UserData *);
-void displayUserEntryAddedInAgendaMessage();
 
 //Public Definitions
 UserData *getNewUserEntry()
@@ -30,10 +20,7 @@ UserData *getNewUserEntry()
         freeAll(userData);
         return NULL;
     }
-    askForName(userData);
-    askForAddress(userData);
-    askForPhone(userData);
-    askForCEP(userData);
+    askForUserInfo(userData);
     reallocateUserDataMemory(userData);
     return userData;
 }
@@ -123,98 +110,6 @@ void displayUserByInitial(uint8_t initial, Agenda *agenda)
     {
         printf("No entry found\n");
     }
-    printf("\nPress any key to return\n");
-    getch();
-}
-
-//Private definitions
-int hasAllocatedAgendaEntry(Agenda **newAgendaEntry)
-{
-    *newAgendaEntry = malloc(sizeof **newAgendaEntry);
-    if(newAgendaEntry != NULL) return 1;
-    free(newAgendaEntry);
-    return 0;
-}
-
-int hasLinkedAgendaEntryToEndOfAgenda(Agenda **agenda, Agenda *agendaEntry)
-{
-    if(isAgendaEmpty(*agenda))
-    {
-        *agenda = agendaEntry;
-    }
-    else
-    {
-        Agenda *currentInLoop = *agenda;
-        while(currentInLoop->nextEntry != NULL)
-        {
-            currentInLoop = currentInLoop->nextEntry;
-        }
-        currentInLoop->nextEntry = agendaEntry;
-    }
-    return 1;
-}
-
-int hasAllocatedUserDataMemory(UserData *userData)
-{
-    userData->name = malloc(sizeof *(userData->name) * MAX_LENGTH);
-    if(userData->name == NULL) return 0;
-    userData->address = malloc(sizeof *(userData->address) * MAX_LENGTH);
-    if(userData->address == NULL) return 0;
-    userData->phone = malloc(sizeof *(userData->phone) * MAX_LENGTH);
-    if(userData->phone == NULL) return 0;
-    userData->CEP = malloc(sizeof *(userData->CEP));
-    if(userData->CEP == NULL) return 0;
-    return 1;
-}
-
-void askForName(UserData *userData)
-{
-    printf("\nName: ");
-    int nameLength = sizeof *(userData->name) * MAX_LENGTH;
-    fgets((char*)userData->name, nameLength, stdin);
-}
-
-void askForAddress(UserData *userData)
-{
-    printf("Address: ");
-    int addressLength = sizeof *(userData->address) * MAX_LENGTH;
-    fgets((char*)userData->address, addressLength, stdin);
-}
-void askForPhone(UserData *userData)
-{
-    printf("Phone: ");
-    int phoneLength = sizeof *(userData->phone) * MAX_LENGTH;
-    fgets((char*)userData->phone, phoneLength, stdin);
-}
-void askForCEP(UserData *userData)
-{
-    printf("CEP: ");
-    scanf("%"SCNu64, userData->CEP);
-    getchar();
-}
-
-void reallocateUserDataMemory(UserData *userData)
-{
-    uint8_t *name = realloc(userData->name, strlen((char*) userData->name));
-    if(name != NULL) userData->name = name;
-    uint8_t *address = realloc(userData->address, strlen((char*) userData->address));
-    if(address != NULL) userData->address = address;
-    uint8_t *phone = realloc(userData->phone, strlen((char*) userData->phone));
-    if(phone != NULL) userData->phone = phone;
-}
-
-void freeAll(UserData *userData)
-{
-    free(userData->name);
-    free(userData->address);
-    free(userData->phone);
-    free(userData->CEP);
-    free(userData);
-}
-
-void displayUserEntryAddedInAgendaMessage()
-{
-    printf("\nUser successfully added in Agenda!");
     printf("\nPress any key to return\n");
     getch();
 }
