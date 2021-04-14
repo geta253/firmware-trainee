@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define MAX_LENGTH 50
+
 typedef struct UserData
 {
     uint8_t *name;
