@@ -1,7 +1,8 @@
 #include "states.h"
 #include "act2_states.h"
-#include "agenda_data.h"
+#include "agenda.h"
 #include "menu.h"
+#include "user_functions.h"
 #include "user_data.h"
 #include <stdio.h>
 
@@ -16,6 +17,7 @@ STATES:
 
 int main(void)
 {
+    struct Agenda *agenda = newAgenda();
     while(getState() != END)
     {
         switch(getState())
@@ -26,20 +28,22 @@ int main(void)
             break;
 
         case INSERT_USER:
-            setUserEntryInAgenda(getNewUserEntry()); //, agenda
+            setUserEntryInAgenda(getNewUserEntry(), &agenda);
             setState(DISPLAY_MENU);
             break;
 
         case SEARCH_USER:
-            displayUserByName(getSearchedUser()); //, agenda
+            displayUserByName(getSearchedUser(), agenda);
             setState(DISPLAY_MENU);
             break;
 
         case LIST_BY_INITIAL:
-            displayUserByInitial(getSearchedInitial()); //, agenda
+            displayUserByInitial(getSearchedInitial(), agenda);
             setState(DISPLAY_MENU);
             break;
 
+        case END:
+            break;
         }
     }
     return 0;
