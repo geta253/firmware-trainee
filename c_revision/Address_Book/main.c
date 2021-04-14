@@ -15,9 +15,9 @@ STATES:
     END             ,
 */
 
-int main(void)
+int main()git
 {
-    struct Agenda *agenda = newAgenda();
+    Agenda *agenda = newAgenda();
     while(getState() != END)
     {
         switch(getState())

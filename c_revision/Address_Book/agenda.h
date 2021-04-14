@@ -3,18 +3,16 @@
 
 #include "user_data.h"
 
-struct Agenda
+typedef struct Agenda
 {
     struct UserData currentEntry;
     struct Agenda *nextEntry;
-};//public
+}Agenda;
 
-struct Agenda *newAgenda();
+Agenda *newAgenda();
 
-int isAgendaEmpty(); //public
-
-int hasAllocatedAgendaEntry(struct Agenda **); //private
-
-int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **, struct Agenda *); //private
+int isAgendaEmpty(Agenda *);
+//void printAllEntriesInAgenda(Agenda *);
+//int clearAllEntriesInAgenda(Agenda **);
 
 #endif // H_AGENDA_INCLUDED

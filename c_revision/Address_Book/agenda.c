@@ -4,39 +4,44 @@
 #include <stdlib.h>
 #include <conio.h>
 
-struct Agenda *newAgenda()
+//Public Definitions
+Agenda *newAgenda()
 {
     return NULL;
 }
 
-int isAgendaEmpty(struct Agenda *agenda)
+int isAgendaEmpty(Agenda *agenda)
 {
     if(agenda != NULL) return 0;
     return 1;
 }
-
-int hasAllocatedAgendaEntry(struct Agenda **p_newEntry)
+/*
+void printAllEntriesInAgenda(Agenda *agenda)
 {
-    *p_newEntry = malloc(sizeof **p_newEntry);
-    if(p_newEntry != NULL) return 1;
-    free(p_newEntry);
-    return 0;
+    Agenda *currentInLoop = agenda;
+    while(currentInLoop != NULL)
+    {
+        printf("\n%s", currentInLoop->currentEntry.name);
+        printf("%d", *(currentInLoop->currentEntry.age));
+        //...
+        currentInLoop = currentInLoop->nextEntry;
+    }
 }
 
-int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *agendaEntry)
+int clearAllEntriesInAgenda(Agenda **agenda)
 {
-    if(isAgendaEmpty(*agenda))
+    Agenda *currentInLoop = *agenda;
+    Agenda *auxiliar = currentInLoop;
+    while(currentInLoop != NULL)
     {
-        *agenda = agendaEntry;
+        auxiliar = auxiliar->nextEntry;
+        free(currentInLoop->currentEntry.name);
+        free(currentInLoop->currentEntry.age);
+        //...
+        free(currentInLoop);
+        currentInLoop = auxiliar;
     }
-    else
-    {
-        struct Agenda *currentInLoop = *agenda;
-        while(currentInLoop->nextEntry != NULL)
-        {
-            currentInLoop = currentInLoop->nextEntry;
-        }
-        currentInLoop->nextEntry = agendaEntry;
-    }
+    *agenda = NULL;
     return 1;
 }
+*/

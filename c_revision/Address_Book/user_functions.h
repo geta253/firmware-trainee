@@ -6,20 +6,11 @@
 #include "user_data.h"
 #include "agenda.h"
 
-struct UserData *getNewUserEntry(); //public
-
-char *getSearchedUser(); //public
-
-void displayUserByName(char *, struct Agenda *); //public
-
-char getSearchedInitial(); //public
-
-void displayUserByInitial(char, struct Agenda *); //public
-
-void printAllEntriesInAgenda(struct Agenda *); //public
-
-int clearAllEntriesInAgenda(struct Agenda **); //public
-
-int setUserEntryInAgenda(struct UserData *, struct Agenda **); //public
+int setUserEntryInAgenda(UserData *, Agenda **);
+UserData *getNewUserEntry();
+char *getSearchedUser();
+void displayUserByName(char *, Agenda *);
+char getSearchedInitial();
+void displayUserByInitial(char, Agenda *);
 
 #endif // H_USER_FUNCTIONS_INCLUDED
