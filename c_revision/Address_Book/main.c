@@ -2,7 +2,7 @@
 #include "act2_states.h"
 #include "agenda.h"
 #include "menu.h"
-#include "user_functions.h"
+#include "user_public_functions.h"
 #include "user_data.h"
 #include <stdio.h>
 
