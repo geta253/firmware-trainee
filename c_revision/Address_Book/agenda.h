@@ -20,5 +20,6 @@ int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **, struct Agenda *);
 
 int insertUserEntryInAgenda(struct Agenda **, struct UserData *); //private
 
+int clearAgenda();
 
 #endif // H_AGENDA_DATA_INCLUDED

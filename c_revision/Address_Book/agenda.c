@@ -1,4 +1,4 @@
-#include "agenda_data.h"
+#include "agenda.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -68,3 +68,18 @@ int insertUserEntryInAgenda(struct Agenda **agenda, struct UserData *userDataEnt
     return 1;
 }
 
+int clearAgenda()
+{
+    struct Agenda *currentInLoop = agenda;
+    struct Agenda *auxiliar = currentInLoop;
+    while(currentInLoop != NULL)
+    {
+        auxiliar = auxiliar->nextEntry;
+        free(currentInLoop->currentEntry.age);
+        //...
+        free(currentInLoop);
+        currentInLoop = auxiliar;
+    }
+    agenda = NULL;
+    return 1;
+}
