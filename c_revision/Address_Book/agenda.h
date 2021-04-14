@@ -1,5 +1,5 @@
-#ifndef H_AGENDA_DATA_INCLUDED
-#define H_AGENDA_DATA_INCLUDED
+#ifndef H_AGENDA_INCLUDED
+#define H_AGENDA_INCLUDED
 
 #include "user_data.h"
 
@@ -7,19 +7,14 @@ struct Agenda
 {
     struct UserData currentEntry;
     struct Agenda *nextEntry;
-};
-extern struct Agenda *agenda;
+};//public
 
-int setUserEntryInAgenda(struct UserData *);
+struct Agenda *newAgenda();
 
-int isAgendaEmpty();
+int isAgendaEmpty(); //public
 
-int hasAllocatedAgendaEntry(struct Agenda **);
+int hasAllocatedAgendaEntry(struct Agenda **); //private
 
-int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **, struct Agenda *);
+int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **, struct Agenda *); //private
 
-int insertUserEntryInAgenda(struct Agenda **, struct UserData *); //private
-
-int clearAgenda();
-
-#endif // H_AGENDA_DATA_INCLUDED
+#endif // H_AGENDA_INCLUDED

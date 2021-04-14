@@ -4,25 +4,22 @@
 #define MAX_LENGTH 50
 
 #include "user_data.h"
+#include "agenda.h"
 
-int allocateUserDataMemory(struct UserData *);
+struct UserData *getNewUserEntry(); //public
 
-void askForAge(struct UserData *);
+char *getSearchedUser(); //public
 
-void freeAll(struct UserData *);
+void displayUserByName(char *, struct Agenda *); //public
 
-struct UserData *getNewUserEntry();
+char getSearchedInitial(); //public
 
-char *getSearchedUser();
+void displayUserByInitial(char, struct Agenda *); //public
 
-void displayUserByName(char *);
+void printAllEntriesInAgenda(struct Agenda *); //public
 
-char getSearchedInitial();
+int clearAllEntriesInAgenda(struct Agenda **); //public
 
-void displayUserByInitial(char);
-
-void printEntireAgenda();
-
-int clearAgenda();
+int setUserEntryInAgenda(struct UserData *, struct Agenda **); //public
 
 #endif // H_USER_FUNCTIONS_INCLUDED

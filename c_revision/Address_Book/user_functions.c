@@ -1,6 +1,7 @@
 #include "user_functions.h"
 #include "user_data.h"
 #include "agenda.h"
+#include "agenda.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -63,7 +64,7 @@ char *getSearchedUser()
     return fgets(searchedName, sizeof *searchedName * MAX_LENGTH, stdin);
 }
 
-void displayUserByName(char *searchedName) //name
+void displayUserByName(char *searchedName, struct Agenda *agenda)
 {
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
@@ -94,10 +95,10 @@ char getSearchedInitial()
     //char *p = fgets(name, sizeof name, stdin) for name[MAX]
 
     printf("\nSearch by an initial:");
-    return (char)fgetc(stdin);;
+    return (char)fgetc(stdin);
 }
 
-void displayUserByInitial(char initial)
+void displayUserByInitial(char initial, struct Agenda *agenda)
 {
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
@@ -124,7 +125,7 @@ void displayUserByInitial(char initial)
     getch();
 }
 
-void printEntireAgenda()
+void printAllEntriesInAgenda(struct Agenda *agenda)
 {
     struct Agenda *currentInLoop = agenda;
     while(currentInLoop != NULL)
@@ -134,9 +135,9 @@ void printEntireAgenda()
     }
 }
 
-int clearAgenda()
+int clearAllEntriesInAgenda(struct Agenda **agenda)
 {
-    struct Agenda *currentInLoop = agenda;
+    struct Agenda *currentInLoop = *agenda;
     struct Agenda *auxiliar = currentInLoop;
     while(currentInLoop != NULL)
     {
@@ -146,6 +147,31 @@ int clearAgenda()
         free(currentInLoop);
         currentInLoop = auxiliar;
     }
-    agenda = NULL;
+    *agenda = NULL;
     return 1;
+}
+
+void displayUserEntryAddedInAgendaMessage()
+{
+    printf("\nUser successfully added in Agenda!");
+    printf("\nPress any key to return\n");
+    getch();
+}
+
+int setUserEntryInAgenda(struct UserData *newUserEntry, struct Agenda **agenda)
+{
+    if(newUserEntry != NULL)
+    {
+        struct Agenda *newAgendaEntry;
+        if(!hasAllocatedAgendaEntry(&newAgendaEntry)) return 0;
+        newAgendaEntry->currentEntry = *newUserEntry;
+        free(newUserEntry);
+        newAgendaEntry->nextEntry = NULL;
+        if(hasLinkedAgendaEntryToEndOfAgenda(agenda, newAgendaEntry))
+        {
+            displayUserEntryAddedInAgendaMessage();
+        }
+        return 1;
+    }
+    return 0;
 }

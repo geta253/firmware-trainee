@@ -1,21 +1,15 @@
 #include "agenda.h"
+#include "user_data.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 
-struct Agenda *agenda = NULL;
-
-int setUserEntryInAgenda(struct UserData *newUserEntry)
+struct Agenda *newAgenda()
 {
-    if(newUserEntry != NULL)
-    {
-        insertUserEntryInAgenda(&agenda, newUserEntry);
-        return 1;
-    }
-    return 0;
+    return NULL;
 }
 
-int isAgendaEmpty()
+int isAgendaEmpty(struct Agenda *agenda)
 {
     if(agenda != NULL) return 0;
     return 1;
@@ -44,42 +38,5 @@ int hasLinkedAgendaEntryToEndOfAgenda(struct Agenda **agenda, struct Agenda *age
         }
         currentInLoop->nextEntry = agendaEntry;
     }
-    return 1;
-}
-
-void displayUserEntryAddedInAgendaMessage()
-{
-    printf("\nUser successfully added in Agenda!");
-    printf("\nPress any key to return\n");
-    getch();
-}
-
-int insertUserEntryInAgenda(struct Agenda **agenda, struct UserData *userDataEntry)
-{
-    struct Agenda *newAgendaEntry;
-    if(!hasAllocatedAgendaEntry(&newAgendaEntry)) return 0;
-    newAgendaEntry->currentEntry = *userDataEntry;
-    free(userDataEntry);
-    newAgendaEntry->nextEntry = NULL;
-    if(hasLinkedAgendaEntryToEndOfAgenda(agenda, newAgendaEntry))
-    {
-        displayUserEntryAddedInAgendaMessage();
-    }
-    return 1;
-}
-
-int clearAgenda()
-{
-    struct Agenda *currentInLoop = agenda;
-    struct Agenda *auxiliar = currentInLoop;
-    while(currentInLoop != NULL)
-    {
-        auxiliar = auxiliar->nextEntry;
-        free(currentInLoop->currentEntry.age);
-        //...
-        free(currentInLoop);
-        currentInLoop = auxiliar;
-    }
-    agenda = NULL;
     return 1;
 }
