@@ -12,5 +12,7 @@ typedef struct Agenda
 Agenda *newAgenda();
 
 int isAgendaEmpty(Agenda *);
+//void printAllEntriesInAgenda(Agenda *);
+//int clearAllEntriesInAgenda(Agenda **);
 
 #endif // H_AGENDA_INCLUDED
