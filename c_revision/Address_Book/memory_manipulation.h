@@ -11,8 +11,8 @@ int hasAllocatedAgendaEntry(Agenda *);
 int linkAgendaEntryToEndOfAgenda(Agenda **, Agenda *);
 
 UserData *createUserEntry();
-void freeUserEntry(UserData *userEntry);
 void allocateUserDataMemory(UserData **);
+void freeUserEntry(UserData *userEntry);
 int hasAllocatedUserDataMemory(UserData *);
 void reallocateUserDataMemory(UserData *);
 void freeAllDataAllocatedForUser(UserData *);

@@ -35,7 +35,7 @@ int setUserEntryInAgenda(UserData *newUserEntry, Agenda **agenda)
         newAgendaEntry->nextEntry = NULL;
         freeUserEntry(newUserEntry);
         linkAgendaEntryToEndOfAgenda(agenda, newAgendaEntry);
-        displayUserEntryAddedInAgendaMessage();
+        showUserEntryAddedInAgendaMessage();
         return 1;
     }
     return 0;
