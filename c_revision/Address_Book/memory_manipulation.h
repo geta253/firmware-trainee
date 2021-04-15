@@ -9,6 +9,7 @@ void allocateAgendaEntryMemory(Agenda **);
 void freeAgendaEntry(Agenda *agendaEntry);
 int hasAllocatedAgendaEntry(Agenda *);
 int linkAgendaEntryToEndOfAgenda(Agenda **, Agenda *);
+void freeAllDataAllocatedForAgendaEntry(Agenda *);
 
 UserData *createUserEntry();
 void allocateUserDataMemory(UserData **);

@@ -42,6 +42,15 @@ int linkAgendaEntryToEndOfAgenda(Agenda **agenda, Agenda *agendaEntry)
     return 1;
 }
 
+void freeAllDataAllocatedForAgendaEntry(Agenda *agendaEntry)
+{
+    free(agendaEntry->currentEntry.name);
+    free(agendaEntry->currentEntry.address);
+    free(agendaEntry->currentEntry.phone);
+    free(agendaEntry->currentEntry.CEP);
+    free(agendaEntry);
+}
+
 UserData *createUserEntry()
 {
     return NULL;

@@ -44,5 +44,7 @@ int main()
             break;
         }
     }
+    printAllEntriesInAgenda(agenda);
+    clearAllEntriesInAgenda(&agenda);
     return 0;
 }

@@ -63,7 +63,7 @@ int stringsAreEqual(char *string1, char *string2)
     return 0;
 }
 
-void showSearchedUser(UserData *userData)
+void showUserFound(UserData *userData)
 {
     printf("\nName: %s", (char*)userData->name);
     printf("Address: %s", (char*)userData->address);
@@ -87,11 +87,6 @@ uint8_t getInitialFromInput()
     printf("\nSearch by an initial:");
     uint8_t inputedInitial = (uint8_t)fgetc(stdin);
     return inputedInitial;
-}
-
-void showUserWithInitial(UserData *userData)
-{
-    showSearchedUser(userData);
 }
 
 void clearScreen()
@@ -126,4 +121,17 @@ int getInputedMenuOption()
 void showInvalidOptionMessage()
 {
     printf("Please type a valid option\n");
+}
+
+void showUserSearchedMessage()
+{
+    printf("\nUser Searched:\n");
+}
+void showUsersFoundByInitialMessage()
+{
+    printf("\nUsers found:\n");
+}
+void showAllUsersInAgendaMessage()
+{
+    printf("\nAll Users in Agenda:\n");
 }

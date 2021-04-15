@@ -11,5 +11,7 @@ uint8_t *getSearchedUser();
 void displayUserByName(uint8_t *, Agenda *);
 uint8_t getSearchedInitial();
 void displayUserByInitial(uint8_t, Agenda *);
+void printAllEntriesInAgenda(Agenda *);
+int clearAllEntriesInAgenda(Agenda **);
 
 #endif // H_USER_FUNCTIONS_INCLUDED

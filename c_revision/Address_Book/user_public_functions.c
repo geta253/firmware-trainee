@@ -52,11 +52,12 @@ void displayUserByName(uint8_t *searchedName, Agenda *agenda)
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
     Agenda *currentInLoop = agenda;
+    showUserSearchedMessage();
     while(currentInLoop != NULL)
     {
         if(stringsAreEqual((char*)currentInLoop->currentEntry.name, (char*)searchedName))
         {
-            showSearchedUser(&currentInLoop->currentEntry);
+            showUserFound(&currentInLoop->currentEntry);
             numberOfUsersFound++;
         }
         currentInLoop = currentInLoop->nextEntry;
@@ -79,11 +80,12 @@ void displayUserByInitial(uint8_t initial, Agenda *agenda)
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
     Agenda *currentInLoop = agenda;
+    showUsersFoundByInitialMessage();
     while(currentInLoop != NULL)
     {
         if(currentInLoop->currentEntry.name[0] == initial)
         {
-            showSearchedUser(&currentInLoop->currentEntry);
+            showUserFound(&currentInLoop->currentEntry);
             numberOfUsersFound++;
         }
         currentInLoop = currentInLoop->nextEntry;
@@ -93,4 +95,31 @@ void displayUserByInitial(uint8_t initial, Agenda *agenda)
         showNoUsersFoundMessage();
     }
     waitForKeyPress();
+}
+
+void printAllEntriesInAgenda(Agenda *agenda)
+{
+    if(agenda == NULL) return;
+    Agenda *currentInLoop = agenda;
+    showAllUsersInAgendaMessage();
+    while(currentInLoop != NULL)
+    {
+        showUserFound(&currentInLoop->currentEntry);
+        currentInLoop = currentInLoop->nextEntry;
+    }
+}
+
+int clearAllEntriesInAgenda(Agenda **agenda)
+{
+    if(*agenda == NULL) return 0;
+    Agenda *currentInLoop = *agenda;
+    Agenda *auxiliar = currentInLoop;
+    while(currentInLoop != NULL)
+    {
+        auxiliar = auxiliar->nextEntry;
+        freeAllDataAllocatedForAgendaEntry(currentInLoop);
+        currentInLoop = auxiliar;
+    }
+    *agenda = NULL;
+    return 1;
 }

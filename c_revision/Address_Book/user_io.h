@@ -6,14 +6,17 @@
 void askForUserInfo(UserData *);
 
 uint8_t *getNameFromInput();
-void showSearchedUser(UserData *);
+void showUserFound(UserData *);
 int stringsAreEqual(char *, char *);
 
 uint8_t getInitialFromInput();
-void showUserWithInitial(UserData *);
 
+void showUserSearchedMessage();
+void showUsersFoundByInitialMessage();
+void showAllUsersInAgendaMessage();
 void showUserEntryAddedInAgendaMessage();
 void showNoUsersFoundMessage();
+
 void waitForKeyPress();
 
 void clearScreen();
