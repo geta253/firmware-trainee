@@ -28,7 +28,7 @@ void showMenu()
     }
 }
 
-state_t getMenuInput()
+State getMenuInput()
 {
     switch(menuInput)
     {

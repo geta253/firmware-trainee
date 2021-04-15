@@ -4,6 +4,6 @@
 #include "states.h"
 
 void showMenu();
-state_t getMenuInput();
+State getMenuInput();
 
 #endif // H_MENU_INCLUDED

@@ -3,41 +3,39 @@
 #include "user_interaction.h"
 #include "user_data.h"
 #include "agenda.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <conio.h>
 #include <stdint.h>
-#include <inttypes.h>
 
 //Public Definitions
 UserData *getNewUserEntry()
 {
-    UserData *userData = malloc(sizeof *(userData));
-    if(userData == NULL) return NULL;
-    if(!hasAllocatedUserDataMemory(userData))
+    UserData *userEntry = createUserEntry();
+    allocateUserDataMemory(&userEntry);
+    if(!hasAllocatedUserDataMemory(userEntry))
     {
-        freeAll(userData);
+        freeAllDataAllocatedForUser(userEntry);
         return NULL;
     }
-    askForUserInfo(userData);
-    reallocateUserDataMemory(userData);
-    return userData;
+    askForUserInfo(userEntry);
+    reallocateUserDataMemory(userEntry);
+    return userEntry;
 }
 
 int setUserEntryInAgenda(UserData *newUserEntry, Agenda **agenda)
 {
     if(newUserEntry != NULL)
     {
-        Agenda *newAgendaEntry;
-        if(!hasAllocatedAgendaEntry(&newAgendaEntry)) return 0;
-        newAgendaEntry->currentEntry = *newUserEntry;
-        free(newUserEntry);
-        newAgendaEntry->nextEntry = NULL;
-        if(hasLinkedAgendaEntryToEndOfAgenda(agenda, newAgendaEntry))
+        Agenda *newAgendaEntry = createAgendaEntry();
+        allocateAgendaEntryMemory(&newAgendaEntry);
+        if(!hasAllocatedAgendaEntry(newAgendaEntry))
         {
-            displayUserEntryAddedInAgendaMessage();
+            freeAgendaEntry(newAgendaEntry);
+            return 0;
         }
+        newAgendaEntry->currentEntry = *newUserEntry;
+        newAgendaEntry->nextEntry = NULL;
+        freeUserEntry(newUserEntry);
+        linkAgendaEntryToEndOfAgenda(agenda, newAgendaEntry);
+        displayUserEntryAddedInAgendaMessage();
         return 1;
     }
     return 0;
@@ -45,10 +43,8 @@ int setUserEntryInAgenda(UserData *newUserEntry, Agenda **agenda)
 
 uint8_t *getSearchedUser()
 {
-    //uint8_t *p = fgets(name, sizeof name, stdin) for name[MAX]
-    uint8_t *searchedName = malloc(sizeof *searchedName * MAX_LENGTH);
-    printf("\nSearch by a name: ");
-    return (uint8_t*)fgets((char*)searchedName, sizeof *searchedName * MAX_LENGTH, stdin);
+    uint8_t *searchedName = getNameFromInput();
+    return searchedName;
 }
 
 void displayUserByName(uint8_t *searchedName, Agenda *agenda)
@@ -58,32 +54,24 @@ void displayUserByName(uint8_t *searchedName, Agenda *agenda)
     Agenda *currentInLoop = agenda;
     while(currentInLoop != NULL)
     {
-        if(!strcmp((char*)currentInLoop->currentEntry.name, (char*)searchedName)) //if equal
+        if(stringsAreEqual((char*)currentInLoop->currentEntry.name, (char*)searchedName))
         {
-            printf("\nUser searched:\n");
-            printf("Name: %s", (char*)currentInLoop->currentEntry.name);
-            printf("Address: %s", (char*)currentInLoop->currentEntry.address);
-            printf("Phone: %s", (char*)currentInLoop->currentEntry.phone);
-            printf("CEP: %"SCNu64"\n", *(currentInLoop->currentEntry.CEP));
-
+            showSearchedUser(&currentInLoop->currentEntry);
             numberOfUsersFound++;
         }
         currentInLoop = currentInLoop->nextEntry;
     }
     if(numberOfUsersFound == 0)
     {
-        printf("\nNo entry found");
+        showNoUsersFoundMessage();
     }
-
-    printf("\nPress any key to return\n");
-    getch();
+    waitForKeyPress();
 }
 
 uint8_t getSearchedInitial()
 {
-    //uint8_t *p = fgets(name, sizeof name, stdin) for name[MAX]
-    printf("\nSearch by an initial:");
-    return (uint8_t)fgetc(stdin);
+    uint8_t initialSearched = getInitialFromInput();
+    return initialSearched;
 }
 
 void displayUserByInitial(uint8_t initial, Agenda *agenda)
@@ -91,25 +79,18 @@ void displayUserByInitial(uint8_t initial, Agenda *agenda)
     if(agenda == NULL) return;
     int numberOfUsersFound = 0;
     Agenda *currentInLoop = agenda;
-
-    printf("\nUsers found:\n");
     while(currentInLoop != NULL)
     {
         if(currentInLoop->currentEntry.name[0] == initial)
         {
-            printf("\nName: %s", (char*)currentInLoop->currentEntry.name);
-            printf("Address: %s", (char*)currentInLoop->currentEntry.address);
-            printf("Phone: %s", (char*)currentInLoop->currentEntry.phone);
-            printf("CEP: %"SCNu64"\n", *(currentInLoop->currentEntry.CEP));
-
+            showSearchedUser(&currentInLoop->currentEntry);
             numberOfUsersFound++;
         }
         currentInLoop = currentInLoop->nextEntry;
     }
     if(numberOfUsersFound == 0)
     {
-        printf("No entry found\n");
+        showNoUsersFoundMessage();
     }
-    printf("\nPress any key to return\n");
-    getch();
+    waitForKeyPress();
 }

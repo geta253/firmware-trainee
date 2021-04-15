@@ -1,18 +1,30 @@
 #include "memory_manipulation.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <string.h>
 
-
-int hasAllocatedAgendaEntry(Agenda **newAgendaEntry)
+Agenda *createAgendaEntry()
 {
-    *newAgendaEntry = malloc(sizeof **newAgendaEntry);
+    return NULL;
+}
+
+void freeAgendaEntry(Agenda *agendaEntry)
+{
+    free(agendaEntry);
+}
+
+void allocateAgendaEntryMemory(Agenda **agendaEntry)
+{
+    *agendaEntry = malloc(sizeof **(agendaEntry));
+}
+
+int hasAllocatedAgendaEntry(Agenda *newAgendaEntry)
+{
     if(newAgendaEntry != NULL) return 1;
     free(newAgendaEntry);
     return 0;
 }
 
-int hasLinkedAgendaEntryToEndOfAgenda(Agenda **agenda, Agenda *agendaEntry)
+int linkAgendaEntryToEndOfAgenda(Agenda **agenda, Agenda *agendaEntry)
 {
     if(isAgendaEmpty(*agenda))
     {
@@ -30,16 +42,34 @@ int hasLinkedAgendaEntryToEndOfAgenda(Agenda **agenda, Agenda *agendaEntry)
     return 1;
 }
 
+UserData *createUserEntry()
+{
+    return NULL;
+}
+
+void freeUserEntry(UserData *userEntry)
+{
+    free(userEntry);
+}
+
+void allocateUserDataMemory(UserData **userData)
+{
+    *userData = malloc(sizeof **(userData));
+    (*userData)->name = malloc(sizeof *((*userData)->name) * MAX_LENGTH);
+    (*userData)->address = malloc(sizeof *((*userData)->address) * MAX_LENGTH);
+    (*userData)->phone = malloc(sizeof *((*userData)->phone) * MAX_LENGTH);
+    (*userData)->CEP = malloc(sizeof *((*userData)->CEP));
+}
+
 int hasAllocatedUserDataMemory(UserData *userData)
 {
-    userData->name = malloc(sizeof *(userData->name) * MAX_LENGTH);
-    if(userData->name == NULL) return 0;
-    userData->address = malloc(sizeof *(userData->address) * MAX_LENGTH);
-    if(userData->address == NULL) return 0;
-    userData->phone = malloc(sizeof *(userData->phone) * MAX_LENGTH);
-    if(userData->phone == NULL) return 0;
-    userData->CEP = malloc(sizeof *(userData->CEP));
-    if(userData->CEP == NULL) return 0;
+    if(   (userData->name == NULL)
+       || (userData->address == NULL)
+       || (userData->phone == NULL)
+       || (userData->CEP == NULL)    )
+    {
+        return 0;
+    }
     return 1;
 }
 
@@ -53,7 +83,7 @@ void reallocateUserDataMemory(UserData *userData)
     if(phone != NULL) userData->phone = phone;
 }
 
-void freeAll(UserData *userData)
+void freeAllDataAllocatedForUser(UserData *userData)
 {
     free(userData->name);
     free(userData->address);

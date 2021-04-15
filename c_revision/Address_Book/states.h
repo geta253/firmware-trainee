@@ -1,10 +1,11 @@
 #ifndef H_STATES_INCLUDED
 #define H_STATES_INCLUDED
+
 #include "act2_states.h"
 
-typedef enum States state_t;
+typedef enum States State;
 
-void setState(state_t);
-state_t getState();
+void setState(State);
+State getState();
 
 #endif // H_STATES_INCLUDED
