@@ -1,5 +1,4 @@
 #include "user_interaction.h"
-#include "user_data.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,7 +11,6 @@ void askForAddress(UserData *);
 void askForPhone(UserData *);
 void askForCEP(UserData *);
 
-
 void askForUserInfo(UserData *userData)
 {
     askForName(userData);
@@ -20,14 +18,12 @@ void askForUserInfo(UserData *userData)
     askForPhone(userData);
     askForCEP(userData);
 }
-
 void askForName(UserData *userData)
 {
     printf("\nName: ");
     int nameLength = sizeof *(userData->name) * MAX_LENGTH;
     fgets((char*)userData->name, nameLength, stdin);
 }
-
 void askForAddress(UserData *userData)
 {
     printf("Address: ");
@@ -47,7 +43,7 @@ void askForCEP(UserData *userData)
     getchar();
 }
 
-void displayUserEntryAddedInAgendaMessage()
+void showUserEntryAddedInAgendaMessage()
 {
     printf("\nUser successfully added in Agenda!");
     printf("\nPress any key to return\n");
@@ -96,4 +92,38 @@ uint8_t getInitialFromInput()
 void showUserWithInitial(UserData *userData)
 {
     showSearchedUser(userData);
+}
+
+void clearScreen()
+{
+    #ifdef _WIN32
+    system("cls");
+    #else
+    system("clear");
+    #endif
+}
+
+void printMenuOptions()
+{
+    printf("\tAddress Book Menu\n");
+    printf("Please select what would you like to do:\n");
+    printf("1 - Add a new entry\n");
+    printf("2 - Search for a user and print their info (exact match)\n");
+    printf("3 - Search for users based on initial typed (case sensitive)\n");
+    printf("4 - End program\n\n");
+
+    printf("Select an option (1-4): ");
+}
+
+int getInputedMenuOption()
+{
+    int inputedMenuOption;
+    scanf("%d", &inputedMenuOption);
+    getchar();
+    return inputedMenuOption;
+}
+
+void showInvalidOptionMessage()
+{
+    printf("Please type a valid option\n");
 }
