@@ -1,5 +1,5 @@
 #include "menu.h"
-#include "user_interaction.h"
+#include "user_io.h"
 
 static int menuInput = 0;
 
